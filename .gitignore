@@ -1,0 +1,14 @@
+node_modules/
+.next/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+*.tsbuildinfo
+.agents/
+.kiro/
+SAAS_AUDIT.md
+TARGET_ARCHITECTURE.md
+skills-lock.json
+/tmp/
