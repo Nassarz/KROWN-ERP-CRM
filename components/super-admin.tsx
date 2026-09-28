@@ -23,6 +23,10 @@ import { vibrate } from '@/lib/utils';
 import { enablePush } from '@/lib/push-client';
 import SuperAdminCallPanel from '@/components/super-admin-call-panel';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, AreaChart, Area } from 'recharts';
+import {
+  Skeleton, StatusBadge, SeverityBadge, EmptyState, LoadingSpinner, SaSummaryCard,
+  saInputCls, saSelectCls, saCardCls, saTableWrapCls,
+} from '@/components/super-admin/shared';
 
 interface SuperAdminProps {
   user: any;
@@ -63,124 +67,6 @@ function formatDateTime(dateStr: string | Date | null) {
 // module scope so React's render-purity lint only sees it as an opaque helper.
 function wallMs(v: number) {
   return v > 0 ? v : Date.now();
-}
-
-function Skeleton({ className = '' }: { className?: string }) {
-  return <div className={`animate-pulse bg-slate-200 dark:bg-white/5 rounded-xl ${className}`} />;
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const colors: Record<string, string> = {
-    active: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-    online: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-    suspended: 'bg-red-500/10 text-red-600 dark:text-red-400',
-    banned: 'bg-red-500/10 text-red-600 dark:text-red-400',
-    paused: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
-    inactive: 'bg-slate-500/10 text-slate-500',
-    offline: 'bg-slate-500/10 text-slate-500',
-    pending: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
-    on_shift: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-    off_shift: 'bg-slate-500/10 text-slate-500',
-    on_leave: 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
-    open: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
-    resolved: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-    closed: 'bg-slate-500/10 text-slate-500',
-    dismissed: 'bg-slate-500/10 text-slate-500',
-    in_progress: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
-    waiting: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
-    waiting_for_support: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
-    critical: 'bg-red-500/10 text-red-600 dark:text-red-400',
-    high: 'bg-orange-500/10 text-orange-600 dark:text-orange-400',
-    medium: 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400',
-    low: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
-    info: 'bg-slate-500/10 text-slate-500',
-    paid: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-    unpaid: 'bg-red-500/10 text-red-600 dark:text-red-400',
-    partial: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
-    partially_paid: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
-    delivered: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-    completed: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-    preparing: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
-    ready: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
-    served: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-    cancelled: 'bg-red-500/10 text-red-600 dark:text-red-400',
-    voided: 'bg-red-500/10 text-red-600 dark:text-red-400',
-    refunded: 'bg-red-500/10 text-red-600 dark:text-red-400',
-    available: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-    unavailable: 'bg-slate-500/10 text-slate-500',
-    out: 'bg-red-500/10 text-red-600 dark:text-red-400',
-    ok: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-  };
-  return (
-    <span className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${colors[status] || colors.info}`}>
-      {status.replace(/_/g, ' ')}
-    </span>
-  );
-}
-
-function SeverityBadge({ severity }: { severity: string }) {
-  const colors: Record<string, string> = {
-    critical: 'bg-red-500 text-white',
-    high: 'bg-orange-500 text-white',
-    medium: 'bg-yellow-500 text-black',
-    low: 'bg-blue-500 text-white',
-    info: 'bg-slate-500 text-white',
-  };
-  return (
-    <span className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${colors[severity] || colors.info}`}>
-      {severity}
-    </span>
-  );
-}
-
-function EmptyState({ icon: Icon, title, description }: { icon: any; title: string; description: string }) {
-  return (
-    <div className="flex flex-col items-center justify-center py-16 text-center">
-      <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-white/5 flex items-center justify-center mb-4">
-        <Icon className="w-8 h-8 text-slate-300 dark:text-slate-600" />
-      </div>
-      <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{title}</h3>
-      <p className="text-sm text-slate-500 max-w-sm">{description}</p>
-    </div>
-  );
-}
-
-function LoadingSpinner({ size = 'sm' }: { size?: 'sm' | 'md' | 'lg' }) {
-  const s = size === 'lg' ? 'w-8 h-8' : size === 'md' ? 'w-5 h-5' : 'w-4 h-4';
-  return <Loader2 className={`${s} animate-spin text-orange-500`} />;
-}
-
-// Shared styles for the read-only SA list tabs (Payments/Orders/Products/Inventory).
-const saInputCls = 'bg-white dark:bg-[#121214] border border-black/5 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/40 w-full sm:w-auto';
-const saSelectCls = 'bg-white dark:bg-[#121214] border border-black/5 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500/40 font-semibold';
-const saCardCls = 'bg-white dark:bg-[#121214]/80 border border-black/5 dark:border-white/5 shadow-sm rounded-2xl p-4';
-const saTableWrapCls = 'bg-white dark:bg-[#121214]/80 border border-black/5 dark:border-white/5 shadow-sm rounded-[1.75rem] overflow-hidden';
-
-function SaSummaryCard({ icon: Icon, label, value, hint, tone = 'slate' }: {
-  icon: any; label: string; value: string | number; hint?: string;
-  tone?: 'slate' | 'orange' | 'emerald' | 'red' | 'blue' | 'purple' | 'amber';
-}) {
-  const tones: Record<string, string> = {
-    slate: 'bg-slate-500/10 text-slate-500',
-    orange: 'bg-orange-500/10 text-orange-500',
-    emerald: 'bg-emerald-500/10 text-emerald-500',
-    red: 'bg-red-500/10 text-red-500',
-    blue: 'bg-blue-500/10 text-blue-500',
-    purple: 'bg-purple-500/10 text-purple-500',
-    amber: 'bg-amber-500/10 text-amber-500',
-  };
-  return (
-    <div className={saCardCls} data-testid={`sum-${String(label).toLowerCase().replace(/[^a-z]+/g, '-')}`}>
-      <div className="flex items-center gap-2 mb-2">
-        <span className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${tones[tone]}`}>
-          <Icon className="w-4 h-4" />
-        </span>
-        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate">{label}</p>
-      </div>
-      <p className="text-xl font-black text-slate-900 dark:text-white tabular-nums truncate">{value}</p>
-      {hint && <p className="text-[10px] text-slate-400 mt-0.5 truncate">{hint}</p>}
-    </div>
-  );
 }
 
 function SearchableSelect({ options, value, onChange, placeholder, label, required }: {
