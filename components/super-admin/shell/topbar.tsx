@@ -183,7 +183,7 @@ export function SuperAdminTopbar({
           <button
             onClick={() => setProfileMenuOpen(o => !o)}
             data-testid="sa-avatar"
-            className="flex items-center gap-2 bg-white dark:bg-[#121214] border border-black/5 dark:border-white/10 shadow-sm pl-1 pr-2.5 py-1 rounded-full hover:bg-slate-50 dark:hover:bg-white/5 transition-all"
+            className="relative z-50 flex items-center gap-2 bg-white dark:bg-[#121214] border border-black/5 dark:border-white/10 shadow-sm pl-1 pr-2.5 py-1 rounded-full hover:bg-slate-50 dark:hover:bg-white/5 transition-all"
           >
             <span className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 text-white text-xs font-black flex items-center justify-center">
               {(user?.name || 'Platform Admin').charAt(0).toUpperCase()}
