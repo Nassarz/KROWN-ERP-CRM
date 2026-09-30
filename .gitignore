@@ -55,3 +55,46 @@ pnpm-debug.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# ============================
+# KROWN LOCAL / SECRET FILES
+# ============================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+service-account*.json
+credentials*.json
+
+# ============================
+# NODE / NEXT
+# ============================
+node_modules/
+.next/
+dist/
+build/
+out/
+coverage/
+
+# ============================
+# LOGS / CACHE
+# ============================
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+.cache/
+.turbo/
+
+# ============================
+# OS / EDITORS
+# ============================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
