@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  ChevronLeft, Users, Store, Activity, Settings, LogOut,
+  ChevronLeft, Users, Store, Activity, Settings, LogOut, Truck,
   TrendingUp, Box, Shield, Sun, Moon, UtensilsCrossed, Receipt, CreditCard, Banknote, Smartphone, Percent,
   Calendar, Filter, Plus, DollarSign, FileText, Upload, Search, Printer, Download, HandCoins
 } from 'lucide-react';
@@ -18,6 +18,7 @@ import FloorPlanEditor from './floor-plan-editor';
 import PersonalCredits from './personal-credits';
 import GlobalSearchModal from './global-search-modal';
 import EfrisControlCenter from './efris-control-center';
+import DistributionCenter from './distribution-center';
 import { 
   formatUGX, 
   Branch,
@@ -27,7 +28,7 @@ import { dataStore } from '@/lib/dataStore';
 import { uploadImageFile } from '@/lib/imageUpload';
 
 export default function AdminPage({ user, setView }: { user: any, setView: (v: 'pos' | 'admin' | 'manager' | 'kitchen') => void }) {
-  const [activeTab, setActiveTab] = useState<'overview' | 'branches' | 'companies' | 'zones' | 'floorPlans' | 'menu' | 'staff' | 'inventory' | 'finance' | 'audit' | 'credits' | 'efris'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'distribution' | 'branches' | 'companies' | 'zones' | 'floorPlans' | 'menu' | 'staff' | 'inventory' | 'finance' | 'audit' | 'credits' | 'efris'>('overview');
   // Persistent Branch Selector State
   const [selectedBranchId, setSelectedBranchId] = useState<string>('all');
   const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
@@ -197,6 +198,7 @@ export default function AdminPage({ user, setView }: { user: any, setView: (v: '
         <nav className="flex flex-row lg:flex-col gap-1 flex-1 overflow-x-auto lg:overflow-y-auto custom-scrollbar pb-2 lg:pb-0">
           {[
             { id: 'overview', icon: Activity, label: 'Overview' },
+            { id: 'distribution', icon: Truck, label: 'Distribution & Sales' },
             { id: 'branches', icon: Store, label: 'Branches' },
             { id: 'companies', icon: Receipt, label: 'Corporate Accounts' },
             { id: 'zones', icon: Box, label: 'Seating Places' },
@@ -495,6 +497,12 @@ export default function AdminPage({ user, setView }: { user: any, setView: (v: '
           )}
 
           {/* 4. OTHER SUB-COMPONENTS */}
+          {activeTab === 'distribution' && (
+            <motion.div key="distribution" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full flex-1 overflow-y-auto pr-1">
+              <DistributionCenter user={user} setView={setView} />
+            </motion.div>
+          )}
+
           {activeTab === 'branches' && (
             <motion.div key="branches" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full flex-1">
               <AdminBranches restaurants={displayBranches} selectedBranchId={selectedBranchId} />

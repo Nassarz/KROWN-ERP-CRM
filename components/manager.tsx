@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  ChevronLeft, Users, Store, Activity, Settings, 
+  ChevronLeft, Users, Store, Activity, Settings, Truck,
   Box, Shield, Sun, Moon, UtensilsCrossed, Search, DollarSign, Calendar, Filter, Printer, Download, TrendingUp, CreditCard, Banknote, Smartphone, Building2, LogOut, HandCoins
 } from 'lucide-react';
 import { vibrate } from '@/lib/utils';
@@ -17,11 +17,12 @@ import PersonalCredits from './personal-credits';
 import AdminCompanies from './admin-companies';
 import AdminZones from './admin-zones';
 import GlobalSearchModal from './global-search-modal';
+import DistributionCenter from './distribution-center';
 import { dataStore } from '@/lib/dataStore';
 import { formatUGX } from '@/lib/mockData';
 
 export default function ManagerPage({ user, setView }: { user: any, setView: (v: 'pos' | 'admin' | 'manager' | 'kitchen') => void }) {
-  const [activeTab, setActiveTab] = useState<'orders' | 'finance' | 'companies' | 'zones' | 'menu' | 'inventory' | 'staff' | 'receipts' | 'audit' | 'credits'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'distribution' | 'finance' | 'companies' | 'zones' | 'menu' | 'inventory' | 'staff' | 'receipts' | 'audit' | 'credits'>('orders');
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('krown_theme');
@@ -236,6 +237,7 @@ export default function ManagerPage({ user, setView }: { user: any, setView: (v:
         <nav className="flex flex-row lg:flex-col gap-1 flex-1 overflow-x-auto lg:overflow-y-auto custom-scrollbar pb-2 lg:pb-0">
           {[
             { id: 'orders', icon: Activity, label: 'Live Orders' },
+            { id: 'distribution', icon: Truck, label: 'Distribution & Sales' },
             { id: 'finance', icon: DollarSign, label: 'Finance & P&L' },
             { id: 'companies', icon: Settings, label: 'Corporate Accounts' },
             { id: 'zones', icon: Box, label: 'Seating Places' },
@@ -337,6 +339,12 @@ export default function ManagerPage({ user, setView }: { user: any, setView: (v:
           {activeTab === 'orders' && (
             <motion.div key="orders" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="h-full overflow-y-auto">
               <ManagerOrders orders={orders} allOrders={allOrders} />
+            </motion.div>
+          )}
+
+          {activeTab === 'distribution' && (
+            <motion.div key="distribution" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="h-full overflow-y-auto">
+              <DistributionCenter user={user} setView={setView} />
             </motion.div>
           )}
 
